@@ -78,4 +78,23 @@ async function crearPedido(usuarioId, items) {
   return pedido;
 }
 
-module.exports = { crearPedido };
+async function obtenerMisPedidos(usuarioId) {
+  const { data, error } = await supabase
+    .from('pedidos')
+    .select('id, total, estado, creado, pedido_items(cantidad, precio_unitario, productos(nombre))')
+    .eq('usuario_id', usuarioId)
+    .order('creado', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+async function obtenerPedidosAdmin() {
+  const { data, error } = await supabase
+    .from('pedidos')
+    .select('id, usuario_id, total, estado, creado, pedido_items(cantidad, precio_unitario, productos(nombre))')
+    .order('creado', { ascending: false });
+  if (error) throw error;
+  return data;
+}
+
+module.exports = { crearPedido, obtenerMisPedidos, obtenerPedidosAdmin };

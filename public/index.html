@@ -14,6 +14,8 @@
     <h1 class="marca">Raíz <span>&amp;</span> Hoja</h1>
     <div class="sesion">
       <span id="saludo"></span>
+      <button id="btn-pedidos" class="btn btn-claro oculto" onclick="verMisPedidos()">Mis pedidos</button>
+      <button id="btn-admin" class="btn btn-claro oculto" onclick="abrirAdmin()">Panel admin</button>
       <button id="btn-ingresar" class="btn btn-claro" onclick="abrirModal()">Ingresar</button>
       <button id="btn-salir" class="btn btn-claro oculto" onclick="cerrarSesion()">Salir</button>
       <button class="btn btn-carrito" onclick="alternarCarrito()">
@@ -42,6 +44,14 @@
     </section>
   </main>
   <footer class="pie-pagina"><span>Raíz &amp; Hoja</span><span>Cultivamos espacios felices · Hecho con cariño 🌱</span></footer>
+
+  <div id="panel-modal" class="modal oculto" onclick="cerrarPanelFondo(event)">
+    <section class="modal-caja panel-caja" role="dialog" aria-modal="true" aria-labelledby="panel-titulo">
+      <button class="btn-cerrar" onclick="cerrarPanel()" aria-label="Cerrar">×</button>
+      <h2 id="panel-titulo"></h2>
+      <div id="panel-contenido"></div>
+    </section>
+  </div>
 
   <!-- CARRITO: panel lateral -->
   <aside id="carrito" class="carrito oculto">

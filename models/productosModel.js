@@ -14,7 +14,7 @@ async function obtenerCategorias() {
 
 // Los productos activos, con el nombre de su categoria.
 // Si llega categoriaId, filtra por esa categoria.
-async function obtenerProductos(categoriaId) {
+async function obtenerProductos(categoriaId, busqueda) {
   const columnas = 'id, nombre, descripcion, precio, stock,' +
                    ' imagen_url, categorias(nombre)';
   let consulta = supabase
@@ -26,10 +26,24 @@ async function obtenerProductos(categoriaId) {
   if (categoriaId) {
     consulta = consulta.eq('categoria_id', categoriaId); // filtro opcional
   }
+  if (busqueda) {
+    consulta = consulta.ilike('nombre', '%' + busqueda + '%');
+  }
 
   const { data, error } = await consulta;
   if (error) throw error;
   return data;
 }
 
-module.exports = { obtenerCategorias, obtenerProductos };
+async function obtenerProducto(id) {
+  const { data, error } = await supabase
+    .from('productos')
+    .select('id, nombre, descripcion, precio, stock, imagen_url, categorias(nombre)')
+    .eq('id', id)
+    .eq('activo', true)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+module.exports = { obtenerCategorias, obtenerProductos, obtenerProducto };

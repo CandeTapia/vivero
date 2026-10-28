@@ -56,18 +56,14 @@ alter table pedidos      enable row level security;
 alter table pedido_items enable row level security;
 
 -- ===== DATOS DE EJEMPLO (vivero) =====
-insert into categorias (nombre) values ('Interior'), ('Exterior'), ('Aromáticas');
+insert into categorias (nombre) values ('Cactus'), ('Frambuesa'), ('Romero'), ('Tulipanes');
 
 insert into productos (nombre, descripcion, precio, stock, categoria_id, imagen_url) values
-  ('Monstera deliciosa', 'Hojas grandes y recortadas. Luz indirecta brillante y riego moderado.', 18500, 8, 1, '/images/planta.svg'),
-  ('Potus colgante', 'Fácil de cuidar, ideal para estantes y rincones luminosos.', 8900, 14, 1, '/images/planta.svg'),
-  ('Sansevieria', 'Resistente y escultural. Se adapta a distintos ambientes.', 12500, 10, 1, '/images/planta.svg'),
-  ('Lavanda', 'Flores perfumadas y color violeta. Le encanta el sol.', 7600, 12, 2, '/images/planta.svg'),
-  ('Romero', 'Aromática de exterior, noble y siempre lista para la cocina.', 5400, 18, 3, '/images/planta.svg'),
-  ('Albahaca', 'Hojas frescas para tus comidas. Ubicala en un lugar soleado.', 3900, 20, 3, '/images/planta.svg');
-
--- ===== IMAGENES =====
--- Subi las fotos al bucket publico "productos" de Storage y guarda cada URL:
--- update productos
--- set imagen_url = 'https://xxxx.supabase.co/storage/v1/object/public/productos/auriculares.jpg'
--- where id = 1;
+  ('Cactus 1', 'Cactus para decorar tu espacio.', 5000, 10, (select id from categorias where nombre = 'Cactus'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/captus1.jpeg'),
+  ('Cactus 2', 'Otra variedad de cactus.', 6000, 9, (select id from categorias where nombre = 'Cactus'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/captus2.jpeg'),
+  ('Frambuesa 1', 'Planta de frambuesa.', 7000, 5, (select id from categorias where nombre = 'Frambuesa'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/frambuesa1.jpeg'),
+  ('Frambuesa 2', 'Otra planta de frambuesa.', 7500, 3, (select id from categorias where nombre = 'Frambuesa'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/frambuesa2.jpeg'),
+  ('Romero 1', 'Planta aromática de romero.', 4000, 10, (select id from categorias where nombre = 'Romero'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/romero1.jpeg'),
+  ('Romero 2', 'Otra planta de romero.', 4500, 10, (select id from categorias where nombre = 'Romero'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/romero2.jpeg'),
+  ('Tulipanes 1', 'Planta de tulipanes.', 8000, 2, (select id from categorias where nombre = 'Tulipanes'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/tulipanes1.jpeg'),
+  ('Tulipanes 2', 'Otra variedad de tulipanes.', 8500, 1, (select id from categorias where nombre = 'Tulipanes'), 'https://kthsegndrxafctfihdnb.supabase.co/storage/v1/object/public/fotos_plantas/tulipanes2.jpeg');

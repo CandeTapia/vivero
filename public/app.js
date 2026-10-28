@@ -1,7 +1,7 @@
 // =========================================================
 // FRONT DE LA TIENDA
 // El front NUNCA habla con Supabase: todo se le pide a nuestra API con fetch.
-// Las partes marcadas con TODO las completamos en la Clase 3.
+// Catálogo, búsqueda, cuenta, detalle y pedidos se conectan a la API con fetch.
 // =========================================================
 
 // ---------- ESTADO ----------
@@ -9,8 +9,11 @@ const catalogo = {};  // los productos que ya vinieron de la API, por id (para n
 let carrito = JSON.parse(localStorage.getItem('carrito')) || [];   // [ { producto_id, cantidad } ]
 let token = localStorage.getItem('token');                         // lo guardamos al hacer login
 let usuarioEmail = localStorage.getItem('email');
+let usuarioRol = localStorage.getItem('rol');
 let categoriaActual = null;
 let ultimaLista = [];
+let temporizadorBusqueda = null;
+let solicitudCatalogo = 0;
 
 function escapar(valor) {
   return String(valor ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -23,32 +26,37 @@ function escapar(valor) {
 
 // Pide los productos a la API y los dibuja.
 // Si categoriaId tiene valor, pide solo los de esa categoria: /productos?categoria=2
-async function cargarProductos(categoriaId) {
+async function cargarProductos(categoriaId = categoriaActual, texto = document.getElementById('buscador').value) {
   categoriaActual = categoriaId || null;
   let url = '/productos';
-  if (categoriaId) url += '?categoria=' + encodeURIComponent(categoriaId);
+  const parametros = new URLSearchParams();
+  if (categoriaActual) parametros.set('categoria', categoriaActual);
+  if (texto.trim()) parametros.set('buscar', texto.trim());
+  if (parametros.size) url += '?' + parametros.toString();
+  const solicitud = ++solicitudCatalogo;
   const grilla = document.getElementById('productos');
   grilla.innerHTML = '<p class="vacio">Buscando tus próximas plantas...</p>';
   try {
     const res = await fetch(url);
     if (!res.ok) {
+      if (solicitud !== solicitudCatalogo) return;
       ultimaLista = [];
       grilla.innerHTML = '<p class="vacio">No pudimos cargar el vivero. Volvé a intentarlo.</p>';
       return mostrarMensaje(await res.text(), 'error');
     }
-    ultimaLista = await res.json();
-    dibujarBusqueda(document.getElementById('buscador')?.value || '');
+    const productos = await res.json();
+    if (solicitud !== solicitudCatalogo) return;
+    ultimaLista = productos;
+    pintarProductos(ultimaLista);
     pintarCategoriaActiva();
   } catch (error) {
     grilla.innerHTML = '<p class="vacio">No hay conexión con la tienda. Revisá que el servidor esté iniciado.</p>';
   }
 }
 
-function buscar(texto) { dibujarBusqueda(texto); }
-
-function dibujarBusqueda(texto) {
-  const t = texto.trim().toLocaleLowerCase('es');
-  pintarProductos(ultimaLista.filter(p => String(p.nombre).toLocaleLowerCase('es').includes(t)));
+function buscar(texto) {
+  clearTimeout(temporizadorBusqueda);
+  temporizadorBusqueda = setTimeout(() => cargarProductos(categoriaActual, texto), 250);
 }
 
 // Dibuja las tarjetas (ya resuelto)
@@ -72,6 +80,7 @@ function pintarProductos(lista) {
           <p class="descripcion">${escapar(p.descripcion || '')}</p>
           <span class="precio">${formatearPrecio(p.precio)}</span>
           <span class="stock">${sinStock ? 'Sin stock' : 'Quedan ' + Number(p.stock)}</span>
+          <button class="btn btn-detalle" onclick="verDetalle(${Number(p.id)})">Ver detalle</button>
           <button class="btn btn-principal" onclick="agregar(${p.id})" ${sinStock ? 'disabled' : ''}>
             Agregar al carrito
           </button>
@@ -206,6 +215,7 @@ async function iniciarSesion(evento) {
     localStorage.setItem('email', email);
     document.getElementById('form-login').reset();
     actualizarSesion();
+    await cargarPerfil();
     mostrarMensajeAuth('¡Sesión iniciada! Ya podés comprar. Cerrá esta ventana para seguir.', 'ok');
   } catch (error) { mostrarMensajeAuth('No pudimos conectar con la tienda.', 'error'); }
 }
@@ -213,8 +223,10 @@ async function iniciarSesion(evento) {
 function cerrarSesion() {
   token = null;
   usuarioEmail = null;
+  usuarioRol = null;
   localStorage.removeItem('token');
   localStorage.removeItem('email');
+  localStorage.removeItem('rol');
   actualizarSesion();
   mostrarMensaje('Cerraste sesión', 'ok');
 }
@@ -224,6 +236,95 @@ function actualizarSesion() {
   document.getElementById('saludo').textContent = logueado ? usuarioEmail : '';
   document.getElementById('btn-ingresar').classList.toggle('oculto', logueado);
   document.getElementById('btn-salir').classList.toggle('oculto', !logueado);
+  document.getElementById('btn-pedidos').classList.toggle('oculto', !logueado);
+  document.getElementById('btn-admin').classList.toggle('oculto', !logueado || usuarioRol !== 'admin');
+}
+
+async function cargarPerfil() {
+  if (!token) return;
+  try {
+    const res = await fetch('/perfil', { headers: { Authorization: 'Bearer ' + token } });
+    if (res.status === 401) {
+      cerrarSesion();
+      return;
+    }
+    if (!res.ok) return;
+    const perfil = await res.json();
+    usuarioRol = perfil.rol;
+    localStorage.setItem('rol', usuarioRol);
+    actualizarSesion();
+  } catch (error) { /* el resto de la tienda sigue disponible */ }
+}
+
+function abrirPanel(titulo, contenido) {
+  document.getElementById('panel-titulo').textContent = titulo;
+  document.getElementById('panel-contenido').innerHTML = contenido;
+  document.getElementById('panel-modal').classList.remove('oculto');
+}
+
+function cerrarPanel() { document.getElementById('panel-modal').classList.add('oculto'); }
+
+function cerrarPanelFondo(evento) {
+  if (evento.target.id === 'panel-modal') cerrarPanel();
+}
+
+async function verDetalle(id) {
+  abrirPanel('Detalle de la planta', '<p class="vacio">Cargando información...</p>');
+  try {
+    const res = await fetch('/productos/' + encodeURIComponent(id));
+    if (!res.ok) throw new Error(await res.text());
+    const p = await res.json();
+    abrirPanel(p.nombre, `
+      <article class="detalle-producto">
+        <img src="${escapar(p.imagen_url || 'images/planta.svg')}" alt="${escapar(p.nombre)}" onerror="this.onerror=null;this.src='images/planta.svg'">
+        <div><span class="categoria">${escapar(p.categorias?.nombre || '')}</span>
+          <p>${escapar(p.descripcion || 'Una linda opción para sumar verde a tu espacio.')}</p>
+          <strong class="precio">${formatearPrecio(p.precio)}</strong>
+          <p class="stock">${Number(p.stock) > 0 ? 'Quedan ' + Number(p.stock) : 'Sin stock'}</p>
+          <button class="btn btn-principal" onclick="agregar(${Number(p.id)})" ${Number(p.stock) < 1 ? 'disabled' : ''}>Agregar al carrito</button>
+        </div>
+      </article>`);
+  } catch (error) { abrirPanel('Detalle de la planta', '<p class="vacio">No pudimos cargar este producto.</p>'); }
+}
+
+function dibujarPedidos(pedidos, admin = false) {
+  if (!pedidos.length) return '<p class="vacio">Todavía no hay pedidos.</p>';
+  return `<div class="lista-pedidos">${pedidos.map(p => `
+    <article class="pedido-card">
+      <div class="pedido-resumen"><strong>Pedido #${Number(p.id)}</strong>${admin ? `<span>Cliente: ${escapar(p.usuario_id)}</span>` : ''}<span>${new Date(p.creado).toLocaleString('es-AR')}</span><span class="estado-pedido">${escapar(p.estado)}</span><strong>${formatearPrecio(p.total)}</strong></div>
+      <ul>${(p.pedido_items || []).map(item => `<li>${escapar(item.productos?.nombre || 'Planta')} · ${Number(item.cantidad)} × ${formatearPrecio(item.precio_unitario)}</li>`).join('')}</ul>
+    </article>`).join('')}</div>`;
+}
+
+async function verMisPedidos() {
+  if (!token) return abrirModal();
+  abrirPanel('Mis pedidos', '<p class="vacio">Cargando tus pedidos...</p>');
+  try {
+    const res = await fetch('/mis-pedidos', { headers: { Authorization: 'Bearer ' + token } });
+    if (!res.ok) throw new Error(await res.text());
+    abrirPanel('Mis pedidos', dibujarPedidos(await res.json()));
+  } catch (error) { abrirPanel('Mis pedidos', '<p class="vacio">No pudimos cargar tus pedidos.</p>'); }
+}
+
+async function abrirAdmin() {
+  if (!token) return abrirModal();
+  abrirPanel('Panel administrador', '<p class="vacio">Cargando inventario y pedidos...</p>');
+  try {
+    const headers = { Authorization: 'Bearer ' + token };
+    const [resPedidos, resProductos] = await Promise.all([
+      fetch('/admin/pedidos', { headers }),
+      fetch('/admin/productos', { headers })
+    ]);
+    if (resPedidos.status === 403 || resProductos.status === 403) {
+      return abrirPanel('Panel administrador', '<p class="vacio">No tenés permiso para acceder a esta sección.</p>');
+    }
+    if (!resPedidos.ok || !resProductos.ok) throw new Error('No se pudo cargar el panel');
+    const [pedidos, productos] = await Promise.all([resPedidos.json(), resProductos.json()]);
+    const inventario = productos.length
+      ? `<div class="inventario-admin">${productos.map(p => `<div><strong>${escapar(p.nombre)}</strong><span>${formatearPrecio(p.precio)}</span><span>Stock: ${Number(p.stock)}</span></div>`).join('')}</div>`
+      : '<p class="vacio">No hay productos en el inventario.</p>';
+    abrirPanel('Panel administrador', `<h3>Inventario</h3>${inventario}<h3>Pedidos de clientes</h3>${dibujarPedidos(pedidos, true)}`);
+  } catch (error) { abrirPanel('Panel administrador', '<p class="vacio">No pudimos cargar el panel.</p>'); }
 }
 
 
@@ -303,3 +404,4 @@ cargarCategorias();
 cargarProductos();
 pintarCarrito();
 actualizarSesion();
+if (token) cargarPerfil();

@@ -80,6 +80,8 @@ body { margin: 0; font-family: "Trebuchet MS", system-ui, Arial, sans-serif; bac
 .tarjeta .stock { font-size: 12px; color: var(--suave); }
 .tarjeta button { margin-top: 6px; }
 .tarjeta button:disabled { background: var(--borde); color: var(--suave); cursor: not-allowed; }
+.tarjeta .btn-detalle { background: transparent; border: 1px solid var(--borde); color: var(--principal); }
+.tarjeta .btn-detalle:hover { background: #f0f3e9; }
 .pie-pagina { display:flex; justify-content:space-between; gap:15px; padding:24px max(24px, calc((100% - 1116px) / 2)); color:#e8eee2; background:var(--principal); font-size:12px; }
 .pie-pagina span:first-child { font:20px Georgia,serif; }
 
@@ -98,6 +100,22 @@ body { margin: 0; font-family: "Trebuchet MS", system-ui, Arial, sans-serif; bac
 /* Modal de login y registro */
 .modal { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: flex; align-items: center; justify-content: center; z-index: 20; }
 .modal-caja { background: var(--tarjeta); border-radius: 10px; padding: 24px; width: 340px; max-width: 92%; position: relative; }
+.panel-caja { width: min(760px, 94vw); max-height: 88vh; overflow-y: auto; }
+.panel-caja > h2 { padding-right: 28px; font: 28px Georgia,serif; }
+.detalle-producto { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.detalle-producto img { width: 100%; max-height: 380px; object-fit: cover; border-radius: 8px 28px 8px 8px; background: #e8eddf; }
+.detalle-producto p { line-height: 1.6; color: var(--suave); }
+.detalle-producto .precio { display: block; margin: 14px 0; }
+.lista-pedidos { display: grid; gap: 12px; }
+.panel-caja h3 { margin: 22px 0 10px; color: var(--principal); font: 20px Georgia,serif; }
+.inventario-admin { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 8px; }
+.inventario-admin > div { display: grid; gap: 5px; padding: 12px; border: 1px solid var(--borde); border-radius: 8px; font-size: 13px; }
+.inventario-admin > div span { color: var(--suave); }
+.pedido-card { border: 1px solid var(--borde); border-radius: 10px; padding: 14px; background: #fff; }
+.pedido-resumen { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 13px; }
+.pedido-resumen > span { color: var(--suave); }
+.pedido-resumen .estado-pedido { padding: 3px 9px; border-radius: 99px; background: #edf2e8; color: var(--principal); }
+.pedido-card ul { margin: 12px 0 0; padding-left: 20px; color: var(--suave); font-size: 13px; line-height: 1.7; }
 .modal-caja .btn-cerrar { position: absolute; top: 8px; right: 12px; }
 .modal-caja h2 { margin: 0 0 14px; color: var(--principal); }
 .mensaje-auth { margin: 12px 0 16px; padding: 10px 12px; border-radius: 7px; font-size: 13px; line-height: 1.45; }
@@ -127,5 +145,7 @@ body { margin: 0; font-family: "Trebuchet MS", system-ui, Arial, sans-serif; bac
   .tarjeta .descripcion { font-size: 12px; }
   .tarjeta .precio { font-size: 16px; }
   .tarjeta .info .btn { padding: 9px 8px; font-size: 12px; }
+  .detalle-producto { grid-template-columns: 1fr; }
+  .detalle-producto img { max-height: 260px; }
   .pie-pagina { flex-direction:column; padding:22px; }
 }

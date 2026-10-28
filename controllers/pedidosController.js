@@ -16,4 +16,22 @@ async function crearPedido(req, res) {
   }
 }
 
-module.exports = { crearPedido };
+async function verMisPedidos(req, res) {
+  try {
+    const pedidos = await model.obtenerMisPedidos(req.usuario.id);
+    res.status(200).json(pedidos);
+  } catch (error) {
+    res.status(500).send('Error al obtener tus pedidos');
+  }
+}
+
+async function verPedidosAdmin(req, res) {
+  try {
+    const pedidos = await model.obtenerPedidosAdmin();
+    res.status(200).json(pedidos);
+  } catch (error) {
+    res.status(500).send('Error al obtener los pedidos');
+  }
+}
+
+module.exports = { crearPedido, verMisPedidos, verPedidosAdmin };

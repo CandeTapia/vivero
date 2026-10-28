@@ -1,5 +1,6 @@
 // CONTROLLER DE USUARIOS
 const model = require('../models/authModel');
+const supabase = require('../config/supabaseClient');
 
 async function registro(req, res) {
   const { email, password, nombre } = req.body;
@@ -28,4 +29,19 @@ async function login(req, res) {
   }
 }
 
-module.exports = { registro, login };
+async function verPerfil(req, res) {
+  try {
+    const { data, error } = await supabase
+      .from('perfiles')
+      .select('id, nombre, rol')
+      .eq('id', req.usuario.id)
+      .maybeSingle();
+    if (error) throw error;
+    if (!data) return res.status(404).send('No se encontró el perfil');
+    res.status(200).json({ ...data, email: req.usuario.email });
+  } catch (error) {
+    res.status(500).send('Error al obtener el perfil');
+  }
+}
+
+module.exports = { registro, login, verPerfil };
