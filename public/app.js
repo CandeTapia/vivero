@@ -125,7 +125,7 @@ function agregar(id) {
   if (item) item.cantidad++;
   else carrito.push({ producto_id: id, cantidad: 1 });
   guardarCarrito();
-  mostrarMensaje('Producto agregado al carrito', 'ok');
+  mostrarMensaje('Producto añadido al carrito', 'ok');
 }
 
 function cambiarCantidad(id, cambio) {
