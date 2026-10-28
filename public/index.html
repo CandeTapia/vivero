@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#264a35">
+  <meta name="description" content="Plantas, aromáticas y todo para hacer crecer tu jardín.">
+  <title>Vivero Raíz &amp; Hoja</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+  <header class="barra">
+    <h1 class="marca">Raíz <span>&amp;</span> Hoja</h1>
+    <div class="sesion">
+      <span id="saludo"></span>
+      <button id="btn-ingresar" class="btn btn-claro" onclick="abrirModal()">Ingresar</button>
+      <button id="btn-salir" class="btn btn-claro oculto" onclick="cerrarSesion()">Salir</button>
+      <button class="btn btn-carrito" onclick="alternarCarrito()">
+        Carrito <span id="contador" class="contador">0</span>
+      </button>
+    </div>
+  </header>
+
+  <div id="mensaje" class="mensaje oculto"></div>
+
+  <main class="contenido">
+    <section class="portada">
+      <p class="sobrelinea">UN POCO DE VERDE, TODOS LOS DÍAS</p>
+      <h2>Hacé lugar para<br><em>algo que crece.</em></h2>
+      <p>Plantas elegidas para llenar tu casa de vida. Encontrá tu próxima favorita.</p>
+      <a class="portada-enlace" href="#catalogo">Explorar el vivero <span>↓</span></a>
+      <span class="portada-hoja hoja-uno">✳</span><span class="portada-hoja hoja-dos">❋</span>
+    </section>
+    <section class="catalogo-seccion" id="catalogo">
+      <div class="catalogo-titulo"><div><p class="sobrelinea">NUESTRA SELECCIÓN</p><h2>Un rincón más verde</h2></div><span>Plantas con ganas de crecer contigo</span></div>
+      <label class="buscador-wrap"><span aria-hidden="true">⌕</span><input id="buscador" type="search" placeholder="Buscar una planta..." oninput="buscar(this.value)" aria-label="Buscar productos"></label>
+    <nav id="categorias" class="categorias"></nav>
+    <section id="productos" class="grilla">
+      <p class="vacio">Cargando productos...</p>
+    </section>
+    </section>
+  </main>
+  <footer class="pie-pagina"><span>Raíz &amp; Hoja</span><span>Cultivamos espacios felices · Hecho con cariño 🌱</span></footer>
+
+  <!-- CARRITO: panel lateral -->
+  <aside id="carrito" class="carrito oculto">
+    <div class="carrito-cabecera">
+      <h2>Tu carrito</h2>
+      <button class="btn-cerrar" onclick="alternarCarrito()">×</button>
+    </div>
+    <ul id="carrito-lista" class="carrito-lista"></ul>
+    <div class="carrito-pie">
+      <p>Total estimado: <strong id="carrito-total">$0</strong></p>
+      <button class="btn btn-principal" onclick="comprar()">Comprar</button>
+    </div>
+  </aside>
+
+  <!-- LOGIN / REGISTRO: ventana modal -->
+  <div id="modal" class="modal oculto">
+    <div class="modal-caja">
+      <button class="btn-cerrar" onclick="cerrarModal()">×</button>
+      <div id="auth-mensaje" class="mensaje-auth oculto" role="status" aria-live="polite"></div>
+
+      <form id="form-login" onsubmit="iniciarSesion(event)">
+        <h2>Ingresar</h2>
+        <input id="login-email" type="email" placeholder="Email" required>
+        <input id="login-password" type="password" placeholder="Contraseña" required>
+        <button class="btn btn-principal" type="submit">Ingresar</button>
+        <p class="cambiar">¿No tenés cuenta? <a href="#" onclick="mostrarRegistro(true)">Registrate</a></p>
+      </form>
+
+      <form id="form-registro" class="oculto" onsubmit="registrar(event)">
+        <h2>Crear cuenta</h2>
+        <input id="reg-nombre" type="text" placeholder="Nombre" required>
+        <input id="reg-email" type="email" placeholder="Email" required>
+        <input id="reg-password" type="password" placeholder="Contraseña (mínimo 6)" minlength="6" required>
+        <button class="btn btn-principal" type="submit">Registrarme</button>
+        <p class="cambiar">¿Ya tenés cuenta? <a href="#" onclick="mostrarRegistro(false)">Ingresá</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Ilustración botánica de una planta en maceta">
+  <defs>
+    <linearGradient id="fondo" x2="1" y2="1"><stop stop-color="#edf0e3"/><stop offset="1" stop-color="#dce7d5"/></linearGradient>
+    <linearGradient id="maceta" x2="0" y2="1"><stop stop-color="#d89c72"/><stop offset="1" stop-color="#b96f51"/></linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="url(#fondo)"/>
+  <circle cx="650" cy="105" r="65" fill="#f7f3d8" opacity=".75"/>
+  <path d="M0 420 Q200 375 400 420 T800 405 V520 H0Z" fill="#c9d7bf" opacity=".65"/>
+  <path d="M398 355 C397 270 400 190 409 115" fill="none" stroke="#526f4b" stroke-width="12" stroke-linecap="round"/>
+  <path d="M404 266 C338 252 270 220 238 158 C304 145 382 178 404 266Z" fill="#668a60"/>
+  <path d="M407 218 C452 147 520 113 583 120 C566 187 504 232 407 218Z" fill="#78996b"/>
+  <path d="M400 319 C338 307 291 279 266 235 C324 220 381 249 400 319Z" fill="#819c70"/>
+  <path d="M407 165 C387 103 400 57 445 28 C475 83 459 131 407 165Z" fill="#54784e"/>
+  <path d="M330 205 Q369 220 400 260 M487 174 Q452 187 411 207 M321 261 Q362 272 398 304" fill="none" stroke="#bed0a9" stroke-width="4" opacity=".8"/>
+  <path d="M302 346 H511 L485 490 Q480 510 458 510 H355 Q333 510 328 490Z" fill="url(#maceta)"/>
+  <ellipse cx="406" cy="348" rx="105" ry="19" fill="#b97855"/>
+  <ellipse cx="406" cy="346" rx="87" ry="12" fill="#7b6044"/>
+  <path d="M345 380 Q405 400 470 380" fill="none" stroke="#e6b08a" stroke-width="7" opacity=".65"/>
+</svg>

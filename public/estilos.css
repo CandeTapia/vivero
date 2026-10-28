@@ -1,0 +1,126 @@
+/* =========================================================
+   VIVERO RAÍZ & HOJA
+   Para adaptarla a tu rubro, alcanza con cambiar estos colores.
+   ========================================================= */
+:root {
+  --principal: #234333;
+  --acento:    #487456;
+  --destacado: #d7924a;
+  --fondo:     #f6f5ed;
+  --tarjeta:   #fffefa;
+  --texto:     #26372c;
+  --suave:     #738176;
+  --borde:     #e5e7dc;
+  --error:     #B23A48;
+  --ok:        #2E7D32;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Trebuchet MS", system-ui, Arial, sans-serif; background: var(--fondo); color: var(--texto); }
+.oculto { display: none !important; }
+
+/* Barra superior */
+.barra { background: var(--principal); color: #fff; padding: 17px max(24px, calc((100% - 1160px) / 2));
+         display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.marca { margin: 0; font-family: Georgia, serif; font-size: 25px; letter-spacing: -.6px; }
+.marca span { color: #c8d9b3; }
+.sesion { display: flex; align-items: center; gap: 10px; }
+#saludo { font-size: 14px; color: #CBD8E6; }
+
+/* Botones */
+.btn { border: none; border-radius: 999px; padding: 9px 17px; font-size: 14px; cursor: pointer; transition: transform .18s, background .18s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-principal { background: var(--acento); color: #fff; width: 100%; padding: 10px; }
+.btn-claro { background: rgba(255,255,255,.12); color: #fff; }
+.btn-carrito { background: #fff; color: var(--principal); font-weight: bold; }
+.contador { background: var(--destacado); color: #fff; border-radius: 10px; padding: 1px 7px; font-size: 12px; margin-left: 4px; }
+.btn-cerrar { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--suave); }
+
+/* Mensajes */
+.mensaje { max-width: 1100px; margin: 14px auto 0; padding: 10px 14px; border-radius: 6px; font-size: 14px; }
+.mensaje.ok { background: #E8F5EA; color: var(--ok); }
+.mensaje.error { background: #FCEBEB; color: var(--error); }
+
+/* Catalogo */
+.contenido { max-width: 1160px; margin: 0 auto; padding: 26px 22px 70px; }
+.portada { min-height: 355px; padding: 65px 8%; position: relative; overflow: hidden; border-radius: 8px 80px 8px 8px; background: linear-gradient(110deg,#e9eddd 0%,#e9eddd 53%,#dce6d2 100%); }
+.sobrelinea { margin: 0 0 12px; color: #65806a; letter-spacing: 2px; font-size: 10px; font-weight: 800; }
+.portada h2 { margin: 0; font: 52px/1.05 Georgia,serif; letter-spacing: -1.8px; color: #294735; }
+.portada h2 em { color: #6e895f; font-weight: 400; }
+.portada>p:not(.sobrelinea) { max-width: 380px; line-height: 1.7; color: #5f7062; font-size: 14px; }
+.portada-enlace { display: inline-flex; gap: 22px; align-items: center; margin-top: 8px; color: #fff; background: var(--principal); border-radius: 99px; padding: 12px 19px; font-size: 13px; text-decoration: none; }
+.portada-hoja { position: absolute; color: #9ab18b; opacity: .45; font-family: Georgia,serif; }
+.hoja-uno { right: 14%; top: 35px; font-size: 170px; transform: rotate(-20deg); }
+.hoja-dos { right: 5%; bottom: -70px; font-size: 270px; transform: rotate(18deg); }
+.catalogo-seccion { padding-top: 56px; }
+.catalogo-titulo { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 20px; }
+.catalogo-titulo h2 { margin: 0; font: 34px Georgia,serif; color: var(--principal); }
+.catalogo-titulo>span { color: var(--suave); font-size: 13px; padding-bottom: 5px; }
+.buscador-wrap { display: flex; align-items: center; gap: 10px; width: min(100%,360px); margin: 18px 0; padding: 0 14px; background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 99px; color: #65806a; }
+.buscador-wrap>span { font-size: 25px; }
+.buscador-wrap input { width: 100%; border: 0; outline: 0; padding: 12px 0; color: var(--texto); background: transparent; font: inherit; }
+.categorias { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.categorias button { border: 1px solid var(--borde); background: var(--tarjeta); color: #586b5b; border-radius: 20px;
+                     padding: 6px 14px; cursor: pointer; font-size: 14px; }
+.categorias button.activa { background: var(--principal); color: #fff; border-color: var(--principal); }
+.grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.vacio { color: var(--suave); }
+.tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 8px 28px 8px 8px; overflow: hidden;
+           display: flex; flex-direction: column; }
+.tarjeta img { width: 100%; height: 205px; object-fit: cover; background: #e8eddf; }
+.tarjeta .info { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.tarjeta h3 { margin: 0; font-size: 16px; }
+.tarjeta .categoria { font-size: 12px; color: var(--suave); text-transform: uppercase; letter-spacing: .5px; }
+.tarjeta .descripcion { font-size: 13px; color: var(--suave); margin: 0; flex: 1; }
+.tarjeta .precio { font-size: 18px; font-weight: bold; color: var(--acento); }
+.tarjeta .stock { font-size: 12px; color: var(--suave); }
+.tarjeta button { margin-top: 6px; }
+.tarjeta button:disabled { background: var(--borde); color: var(--suave); cursor: not-allowed; }
+.pie-pagina { display:flex; justify-content:space-between; gap:15px; padding:24px max(24px, calc((100% - 1116px) / 2)); color:#e8eee2; background:var(--principal); font-size:12px; }
+.pie-pagina span:first-child { font:20px Georgia,serif; }
+
+/* Carrito */
+.carrito { position: fixed; top: 0; right: 0; width: 340px; max-width: 100%; height: 100%; background: var(--tarjeta);
+           box-shadow: -4px 0 20px rgba(0,0,0,.15); display: flex; flex-direction: column; z-index: 10; }
+.carrito-cabecera { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--borde); }
+.carrito-cabecera h2 { margin: 0; font-size: 18px; color: var(--principal); }
+.carrito-lista { list-style: none; margin: 0; padding: 0 18px; overflow-y: auto; flex: 1; }
+.carrito-lista li { display: flex; justify-content: space-between; align-items: center; gap: 8px;
+                    padding: 10px 0; border-bottom: 1px solid var(--borde); font-size: 14px; }
+.carrito-lista .cantidad button { border: 1px solid var(--borde); background: #fff; border-radius: 4px; width: 26px; cursor: pointer; }
+.carrito-pie { padding: 14px 18px; border-top: 1px solid var(--borde); }
+.carrito-pie p { margin: 0 0 10px; }
+
+/* Modal de login y registro */
+.modal { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: flex; align-items: center; justify-content: center; z-index: 20; }
+.modal-caja { background: var(--tarjeta); border-radius: 10px; padding: 24px; width: 340px; max-width: 92%; position: relative; }
+.modal-caja .btn-cerrar { position: absolute; top: 8px; right: 12px; }
+.modal-caja h2 { margin: 0 0 14px; color: var(--principal); }
+.mensaje-auth { margin: 12px 0 16px; padding: 10px 12px; border-radius: 7px; font-size: 13px; line-height: 1.45; }
+.mensaje-auth.ok { background: #e8f2e7; color: #315c3c; }
+.mensaje-auth.error { background: #fcebea; color: #a3353a; }
+.modal-caja input { width: 100%; padding: 9px 10px; margin-bottom: 10px; border: 1px solid var(--borde); border-radius: 6px; font-size: 14px; }
+.cambiar { font-size: 13px; color: var(--suave); text-align: center; margin: 12px 0 0; }
+
+@media (max-width: 600px) {
+  .barra { padding: 14px 16px; }
+  .sesion { gap: 6px; }
+  #saludo { display: none; }
+  .contenido { padding: 16px 14px 46px; }
+  .portada { min-height: 340px; padding: 48px 25px; border-top-right-radius: 55px; }
+  .portada h2 { font-size: 42px; }
+  .hoja-uno { right: 7%; top: 130px; font-size: 115px; }
+  .hoja-dos { right: -13%; bottom: -62px; font-size: 200px; }
+  .catalogo-seccion { padding-top: 40px; }
+  .catalogo-titulo { display: block; }
+  .catalogo-titulo h2 { font-size: 29px; }
+  .catalogo-titulo>span { display: block; margin-top: 8px; }
+  .grilla { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 11px; }
+  .tarjeta img { height: 145px; }
+  .tarjeta .info { padding: 10px; }
+  .tarjeta h3 { font-size: 14px; }
+  .tarjeta .descripcion { font-size: 12px; }
+  .tarjeta .precio { font-size: 16px; }
+  .tarjeta .info .btn { padding: 9px 8px; font-size: 12px; }
+  .pie-pagina { flex-direction:column; padding:22px; }
+}
